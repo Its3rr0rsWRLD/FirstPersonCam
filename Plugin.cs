@@ -46,7 +46,7 @@ namespace FirstPersonCam
 
         void OnGameInitialized(object sender, EventArgs e)
         {
-            GameObject.Find("Environment Objects/LocalObjects_Prefab/TreeRoom/TreeRoomInteractables/UI/CodeOfConduct/COC Text").GetComponent<Text>().text = "IF YOU WANT TO SEE SOME OF MY OTHER MODS JOIN MY DISCORD SERVER EITHER FROM THE DESCRIPTIONS FROM MY VIDEOS OR FROM THE LINK HERE; https://discord.gg/EPkEqp9bAa"; //Bottom Text
+            GameObject.Find("Environment Objects/LocalObjects_Prefab/TreeRoom/TreeRoomInteractables/UI/CodeOfConduct/COC Text").GetComponent<Text>().text = "IF YOU WOULD LIKE TO SEE MORE JUST PING ME IN discord.gg/monkemod WITH THE MOD IDEA"; //Bottom Text
             GameObject.Find("Environment Objects/LocalObjects_Prefab/TreeRoom/TreeRoomInteractables/UI/CodeOfConduct").GetComponent<Text>().text = "Thanks for using my mod!"; //Top text
             obj = GameObject.Find("Player Objects/Third Person Camera");
             obj.SetActive(false);
