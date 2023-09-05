@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,75 +6,59 @@ using Utilla;
 
 namespace FirstPersonCam
 {
-    /// <summary>
-    /// This is your mod's main class.
-    /// </summary>
+    // Constants for easier maintenance
+    public static class TextContent
+    {
+        public const string BottomText = "IF YOU WOULD LIKE TO SEE MORE JUST PING ME IN discord.gg/monkemod WITH THE MOD IDEA";
+        public const string TopText = "Thanks for using my mod!";
+    }
 
-    /* This attribute tells Utilla to look for [ModdedGameJoin] and [ModdedGameLeave] */
     [ModdedGamemode]
     [BepInDependency("org.legoandmars.gorillatag.utilla", "1.5.0")]
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.Version)]
     public class Plugin : BaseUnityPlugin
     {
-        bool inRoom;
-        GameObject obj;
+        private GameObject obj;
 
-        void Start()
+        // Called when the mod is enabled
+        void OnEnable()
         {
-            /* A lot of Gorilla Tag systems will not be set up when start is called /*
-			/* Put code in OnGameInitialized to avoid null references */
-
+            HarmonyPatches.ApplyHarmonyPatches();
             Utilla.Events.GameInitialized += OnGameInitialized;
         }
 
-        void OnEnable()
-        {
-            /* Set up your mod here */
-            /* Code here runs at the start and whenever your mod is enabled*/
-
-            HarmonyPatches.ApplyHarmonyPatches();
-        }
-
+        // Called when the mod is disabled
         void OnDisable()
         {
-            /* Undo mod setup here */
-            /* This provides support for toggling mods with ComputerInterface, please implement it :) */
-            /* Code here runs whenever your mod is disabled (including if it disabled on startup)*/
-
             HarmonyPatches.RemoveHarmonyPatches();
+            Utilla.Events.GameInitialized -= OnGameInitialized;
         }
 
+        // Called when the game is initialized
         void OnGameInitialized(object sender, EventArgs e)
         {
-            GameObject.Find("Environment Objects/LocalObjects_Prefab/TreeRoom/TreeRoomInteractables/UI/CodeOfConduct/COC Text").GetComponent<Text>().text = "IF YOU WOULD LIKE TO SEE MORE JUST PING ME IN discord.gg/monkemod WITH THE MOD IDEA"; //Bottom Text
-            GameObject.Find("Environment Objects/LocalObjects_Prefab/TreeRoom/TreeRoomInteractables/UI/CodeOfConduct").GetComponent<Text>().text = "Thanks for using my mod!"; //Top text
+            UpdateText("Environment Objects/LocalObjects_Prefab/TreeRoom/TreeRoomInteractables/UI/CodeOfConduct/COC Text", TextContent.BottomText);
+            UpdateText("Environment Objects/LocalObjects_Prefab/TreeRoom/TreeRoomInteractables/UI/CodeOfConduct", TextContent.TopText);
             obj = GameObject.Find("Player Objects/Third Person Camera");
             obj.SetActive(false);
         }
 
-        void Update()
+        // Helper method to update text
+        private void UpdateText(string path, string newText)
         {
-            /* Code here runs every frame when the mod is enabled */
+            GameObject.Find(path).GetComponent<Text>().text = newText;
         }
 
-        /* This attribute tells Utilla to call this method when a modded room is joined */
         [ModdedGamemodeJoin]
         public void OnJoin(string gamemode)
         {
-            /* Activate your mod here */
-            /* This code will run regardless of if the mod is enabled*/
-
-            inRoom = true;
+            // Activate your mod here
         }
 
-        /* This attribute tells Utilla to call this method when a modded room is left */
         [ModdedGamemodeLeave]
         public void OnLeave(string gamemode)
         {
-            /* Deactivate your mod here */
-            /* This code will run regardless of if the mod is enabled*/
-
-            inRoom = false;
+            // Deactivate your mod here
         }
     }
 }
